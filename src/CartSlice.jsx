@@ -6,7 +6,6 @@ export const CartSlice = createSlice({
     items: [], // Initialize items as an empty array
   },
   reducers: {
-    // Reducer to add an item to the cart
     addItem: (state, action) => {
       const { name, image, cost } = action.payload;
       const existingItem = state.items.find(item => item.name === name);
@@ -16,14 +15,9 @@ export const CartSlice = createSlice({
         state.items.push({ name, image, cost, quantity: 1 });
       }
     },
-    
-    // Reducer to remove an item from the cart
     removeItem: (state, action) => {
-      const itemName = action.payload;
-      state.items = state.items.filter(item => item.name !== itemName);
+      state.items = state.items.filter(item => item.name !== action.payload);
     },
-
-    // Reducer to update the quantity of an item in the cart
     updateQuantity: (state, action) => {
       const { name, quantity } = action.payload;
       const itemToUpdate = state.items.find(item => item.name === name);
@@ -34,8 +28,9 @@ export const CartSlice = createSlice({
   },
 });
 
-// Export actions to be used in components
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
 
-// Export reducer to be used in the store
+export const selectTotalQuantity = (state) =>
+  state.cart.items.reduce((total, item) => total + item.quantity, 0);
+
 export default CartSlice.reducer;
